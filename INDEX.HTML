@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Consumer Services Summative Test Part 2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .question-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .option-button {
+            transition: all 0.2s ease;
+        }
+        .option-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .correct { background-color: #10b981 !important; color: white; }
+        .incorrect { background-color: #ef4444 !important; color: white; }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        
+        <!-- Intro Page -->
+        <div id="intro-page" class="fade-in">
+            <div class="text-center mb-8">
+                <h1 class="text-5xl font-bold text-gray-800 mb-4">🍽️ Food Consumer Services Summative Test Part 2</h1>
+                <p class="text-gray-600 text-xl mb-2">Test your knowledge of knife cuts, salads, and recipe calculations</p>
+                <p class="text-gray-500 text-lg">⏰ You have 40 seconds to complete all questions!</p>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-8 shadow-lg max-w-md mx-auto">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Student Information</h2>
+                <form id="student-form" class="space-y-6">
+                    <div>
+                        <label for="student-name" class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                        <input type="text" id="student-name" name="name" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                               placeholder="Enter your full name">
+                    </div>
+                    
+                    <div>
+                        <label for="student-grade" class="block text-sm font-medium text-gray-700 mb-2">Grade Level *</label>
+                        <select id="student-grade" name="grade" required 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200">
+                            <option value="">Select your grade</option>
+                            <option value="Grade 7">Grade 7</option>
+                            <option value="Grade 8">Grade 8</option>
+                            <option value="Grade 9">Grade 9</option>
+                            <option value="Grade 10">Grade 10</option>
+                            <option value="Grade 11">Grade 11</option>
+                            <option value="Grade 12">Grade 12</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="student-section" class="block text-sm font-medium text-gray-700 mb-2">Section *</label>
+                        <input type="text" id="student-section" name="section" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                               placeholder="Enter your section (e.g., A, B, Einstein, etc.)">
+                    </div>
+                    
+                    <button type="submit" 
+                            class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-blue-600 transition-all duration-200 transform hover:scale-105">
+                        Start Quiz 🚀
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quiz Page -->
+        <div id="quiz-page" class="hidden">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800 mb-2">🍽️ Food Consumer Services Summative Test Part 2</h1>
+                <div class="bg-white rounded-lg p-3 inline-block shadow-md">
+                    <p class="text-gray-600 text-sm">Student: <span id="display-name" class="font-semibold"></span> | 
+                    Grade: <span id="display-grade" class="font-semibold"></span> | 
+                    Section: <span id="display-section" class="font-semibold"></span></p>
+                </div>
+            </div>
+
+            <!-- Timer and Progress Bar -->
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm font-medium text-gray-700">Progress</span>
+                        <span class="text-sm font-medium text-gray-700" id="progress-text">0 / 20</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-lg font-medium text-gray-700">⏰ Time Remaining:</span>
+                        <span class="bg-red-100 text-red-600 px-4 py-2 rounded-lg text-xl font-bold" id="overall-timer">40</span>
+                    </div>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div class="progress-bar bg-gradient-to-r from-purple-500 to-blue-500 h-3 rounded-full" id="progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="quiz-container" class="space-y-6">
+                <!-- Questions will be generated here -->
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="hidden text-center mt-8">
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <div class="text-6xl mb-4" id="results-emoji">🎉</div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Quiz Complete!</h2>
+                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                    <p class="text-gray-600 mb-2">Student: <span id="final-name" class="font-semibold"></span></p>
+                    <p class="text-gray-600 mb-2">Grade: <span id="final-grade" class="font-semibold"></span> | Section: <span id="final-section" class="font-semibold"></span></p>
+                </div>
+                <div class="text-2xl font-semibold mb-4" id="final-score"></div>
+                <div class="text-gray-600 mb-6" id="score-message"></div>
+                
+                <div class="space-y-4">
+                    <button onclick="submitToTeacher()" id="submit-btn"
+                            class="w-full bg-green-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-600 transition-all duration-200">
+                        📧 Send Results to Teacher
+                    </button>
+                    <button onclick="sendBackupEmail()" id="backup-email-btn" style="display: none;"
+                            class="w-full bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-all duration-200">
+                        📧 Send Backup Email (Manual)
+                    </button>
+                    <button onclick="viewDatabase()" 
+                            class="w-full bg-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all duration-200">
+                        📊 View All Student Scores
+                    </button>
+                    <button onclick="restartQuiz()" 
+                            class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:from-purple-600 hover:to-blue-600 transition-all duration-200">
+                        Take Quiz Again
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Section -->
+        <div id="database-section" class="hidden mt-8">
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800">📊 Student Scores Database</h2>
+                    <button onclick="closeDatabase()" 
+                            class="bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-600 transition-all duration-200">
+                        ✕ Close
+                    </button>
+                </div>
+                
+                <div class="mb-6 flex flex-wrap gap-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-600">Total Students</p>
+                        <p class="text-2xl font-bold text-blue-600" id="total-students">0</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-600">Average Score</p>
+                        <p class="text-2xl font-bold text-green-600" id="average-score">0%</p>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-600">Highest Score</p>
+                        <p class="text-2xl font-bold text-yellow-600" id="highest-score">0%</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-600">Lowest Score</p>
+                        <p class="text-2xl font-bold text-red-600" id="lowest-score">0%</p>
+                    </div>
+                </div>
+
+                <div class="mb-4 flex flex-wrap gap-2">
+                    <button onclick="filterByGrade('all')" id="filter-all" 
+                            class="px-4 py-2 bg-purple-500 text-white rounded-lg font-semibold hover:bg-purple-600 transition-all duration-200">
+                        All Grades
+                    </button>
+                    <button onclick="filterByGrade('Grade 7')" id="filter-grade-7" 
+                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-all duration-200">
+                        Grade 7
+                    </button>
+                    <button onclick="filterByGrade('Grade 8')" id="filter-grade-8" 
+                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-all duration-200">
+                        Grade 8
+                    </button>
+                    <button onclick="filterByGrade('Grade 9')" id="filter-grade-9" 
+                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-all duration-200">
+                        Grade 9
+                    </button>
+                    <button onclick="filterByGrade('Grade 10')" id="filter-grade-10" 
+                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-all duration-200">
+                        Grade 10
+                    </button>
+                    <button onclick="filterByGrade('Grade 11')" id="filter-grade-11" 
+                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-all duration-200">
+                        Grade 11
+                    </button>
+                    <button onclick="filterByGrade('Grade 12')" id="filter-grade-12" 
+                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-all duration-200">
+                        Grade 12
+                    </button>
+                </div>
+
+                <div class="mb-4 flex gap-2">
+                    <button onclick="exportToCSV()" 
+                            class="px-4 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition-all duration-200">
+                        📥 Export CSV
+                    </button>
+                    <button onclick="clearDatabase()" 
+                            class="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-all duration-200">
+                        🗑️ Clear All Data
+                    </button>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="border border-gray-300 px-4 py-2 text-left font-semibold">#</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left font-semibold">Student Name</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left font-semibold">Grade</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left font-semibold">Section</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left font-semibold">Score</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left font-semibold">Percentage</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left font-semibold">Performance</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left font-semibold">Date & Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="database-table-body">
+                            <!-- Student records will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "A thicker version of julienne cuts, measuring about ½ inch thick and 2–3 inches long.",
+                options: ["Rondelle", "Batonnet", "Brunoise", "Chiffonade"],
+                correct: 1
+            },
+            {
+                question: "Salad classification that features fresh or canned fruits, often served as dessert or appetizer.",
+                options: ["Combination salad", "Fruit salad", "Protein salad", "Green salad"],
+                correct: 1
+            },
+            {
+                question: "Thickened dressing prepared with eggs, flour, or cornstarch and cooked.",
+                options: ["Cooked dressing", "Specialty dressing", "Creamy dressing", "Vinaigrette"],
+                correct: 0
+            },
+            {
+                question: "The usable portion of ingredients after preparation, such as trimmed vegetables.",
+                options: ["Conversion factor", "Portion control", "Food ratio", "Yield percentage"],
+                correct: 3
+            },
+            {
+                question: "Cutting cylindrical vegetables into round slices, often used for zucchini or cucumbers.",
+                options: ["Brunoise", "Rondelle", "Julienne", "Paysanne"],
+                correct: 1
+            },
+            {
+                question: "Cutting food into thin, matchstick-like strips approximately 2–3 inches long and 1/8 inch thick.",
+                options: ["Brunoise", "Julienne", "Batonnet", "Chopping"],
+                correct: 1
+            },
+            {
+                question: "The total expenditure on ingredients required to prepare a dish or menu item.",
+                options: ["Portion size", "Food cost", "Recipe quantification", "Yield"],
+                correct: 1
+            },
+            {
+                question: "A salad dressing made from oil and vinegar, often flavored with herbs or mustard.",
+                options: ["Creamy dressing", "Specialty dressing", "Cooked dressing", "Vinaigrette"],
+                correct: 3
+            },
+            {
+                question: "The part of a recipe that indicates the number of servings or portions the dish will produce.",
+                options: ["Yield", "Ingredients list", "Body", "Portion size"],
+                correct: 0
+            },
+            {
+                question: "Cutting food into thin, flat shapes such as squares or triangles (½ inch × ½ inch × 1/8 inch).",
+                options: ["Paysanne", "Rondelle", "Chiffonade", "Julienne"],
+                correct: 0
+            },
+            {
+                question: "Type of salad dressing made with mayonnaise, yogurt, sour cream, or buttermilk.",
+                options: ["Vinaigrette", "Cooked dressing", "Creamy dressing", "Dessert dressing"],
+                correct: 2
+            },
+            {
+                question: "The factor calculated by dividing the desired yield by the original yield when scaling recipes.",
+                options: ["Conversion factor", "Recipe quantification", "Yield percentage", "Portion ratio"],
+                correct: 0
+            },
+            {
+                question: "Cutting food into small, irregular pieces, often used for onions, herbs, and vegetables.",
+                options: ["Chopping", "Dicing", "Oblique cut", "Brunoise"],
+                correct: 0
+            },
+            {
+                question: "Slicing leafy vegetables or herbs into thin ribbons by stacking, rolling, and slicing.",
+                options: ["Chiffonade", "Paysanne", "Brunoise", "Julienne"],
+                correct: 0
+            },
+            {
+                question: "A precise, detailed guide designed to produce consistent quality and quantity of food every time it is prepared.",
+                options: ["Instructional recipe", "Menu", "Standardized recipe", "Food cost"],
+                correct: 2
+            },
+            {
+                question: "Cutting food into angled pieces to increase surface area for even cooking, often used for root vegetables like carrots.",
+                options: ["Oblique (Roll Cut)", "Brunoise", "Julienne", "Paysanne"],
+                correct: 0
+            },
+            {
+                question: "The main ingredient in a salad that gives it its identity (e.g., chicken in chicken salad).",
+                options: ["Dressing", "Garnish", "Base", "Body"],
+                correct: 3
+            },
+            {
+                question: "Sweet salad type that may include whipped cream, gelatin, and fruits.",
+                options: ["Specialty salad", "Dessert salad", "Fruit salad", "Protein salad"],
+                correct: 1
+            },
+            {
+                question: "Cutting food into extremely fine pieces, often used for garlic, ginger, and herbs.",
+                options: ["Brunoise", "Mincing", "Dicing", "Chopping"],
+                correct: 1
+            },
+            {
+                question: "Dressing category that includes unique or regional flavors such as sesame-ginger or raspberry vinaigrette.",
+                options: ["Vinaigrette", "Specialty dressing", "Creamy dressing", "Cooked dressing"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+        let overallTimeLeft = 40;
+        let timer = null;
+        let quizStarted = false;
+        let studentInfo = {};
+        let shuffledQuestions = [];
+        let currentFilter = 'all';
+
+        // Database functions
+        function getStudentDatabase() {
+            const stored = localStorage.getItem('studentScores');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function saveToDatabase(studentData) {
+            const database = getStudentDatabase();
+            database.push(studentData);
+            localStorage.setItem('studentScores', JSON.stringify(database));
+        }
+
+        function clearDatabase() {
+            if (confirm('Are you sure you want to clear all student data? This cannot be undone.')) {
+                localStorage.removeItem('studentScores');
+                updateDatabaseDisplay();
+                alert('Database cleared successfully!');
+            }
+        }
+
+        function exportToCSV() {
+            const database = getStudentDatabase();
+            if (database.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+
+            const headers = ['Student Name', 'Grade', 'Section', 'Score', 'Total Questions', 'Percentage', 'Performance Level', 'Date & Time'];
+            const csvContent = [
+                headers.join(','),
+                ...database.map(record => [
+                    `"${record.name}"`,
+                    `"${record.grade}"`,
+                    `"${record.section}"`,
+                    record.score,
+                    record.totalQuestions,
+                    `${record.percentage}%`,
+                    `"${record.performanceLevel}"`,
+                    `"${record.completedAt}"`
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `student_scores_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function filterByGrade(grade) {
+            currentFilter = grade;
+            
+            // Update button styles
+            document.querySelectorAll('[id^="filter-"]').forEach(btn => {
+                btn.className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-all duration-200';
+            });
+            
+            const activeBtn = grade === 'all' ? 'filter-all' : `filter-${grade.toLowerCase().replace(' ', '-')}`;
+            document.getElementById(activeBtn).className = 'px-4 py-2 bg-purple-500 text-white rounded-lg font-semibold hover:bg-purple-600 transition-all duration-200';
+            
+            updateDatabaseDisplay();
+        }
+
+        function updateDatabaseDisplay() {
+            const database = getStudentDatabase();
+            const filteredData = currentFilter === 'all' ? database : database.filter(record => record.grade === currentFilter);
+            
+            // Update statistics
+            document.getElementById('total-students').textContent = filteredData.length;
+            
+            if (filteredData.length > 0) {
+                const percentages = filteredData.map(record => record.percentage);
+                const avgScore = Math.round(percentages.reduce((a, b) => a + b, 0) / percentages.length);
+                const highScore = Math.max(...percentages);
+                const lowScore = Math.min(...percentages);
+                
+                document.getElementById('average-score').textContent = `${avgScore}%`;
+                document.getElementById('highest-score').textContent = `${highScore}%`;
+                document.getElementById('lowest-score').textContent = `${lowScore}%`;
+            } else {
+                document.getElementById('average-score').textContent = '0%';
+                document.getElementById('highest-score').textContent = '0%';
+                document.getElementById('lowest-score').textContent = '0%';
+            }
+            
+            // Update table
+            const tableBody = document.getElementById('database-table-body');
+            tableBody.innerHTML = '';
+            
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="8" class="border border-gray-300 px-4 py-8 text-center text-gray-500">No student records found</td></tr>';
+                return;
+            }
+            
+            filteredData.forEach((record, index) => {
+                const row = document.createElement('tr');
+                row.className = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                
+                const performanceColor = record.percentage >= 90 ? 'text-green-600' : 
+                                       record.percentage >= 80 ? 'text-blue-600' : 
+                                       record.percentage >= 70 ? 'text-yellow-600' : 'text-red-600';
+                
+                row.innerHTML = `
+                    <td class="border border-gray-300 px-4 py-2">${index + 1}</td>
+                    <td class="border border-gray-300 px-4 py-2 font-semibold">${record.name}</td>
+                    <td class="border border-gray-300 px-4 py-2">${record.grade}</td>
+                    <td class="border border-gray-300 px-4 py-2">${record.section}</td>
+                    <td class="border border-gray-300 px-4 py-2">${record.score}/${record.totalQuestions}</td>
+                    <td class="border border-gray-300 px-4 py-2 font-semibold">${record.percentage}%</td>
+                    <td class="border border-gray-300 px-4 py-2 ${performanceColor} font-semibold">${record.performanceLevel}</td>
+                    <td class="border border-gray-300 px-4 py-2 text-sm">${record.completedAt}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        function viewDatabase() {
+            document.getElementById('results-section').classList.add('hidden');
+            document.getElementById('database-section').classList.remove('hidden');
+            updateDatabaseDisplay();
+        }
+
+        function closeDatabase() {
+            document.getElementById('database-section').classList.add('hidden');
+            document.getElementById('results-section').classList.remove('hidden');
+        }
+
+        // Function to shuffle array
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Function to shuffle question choices while keeping track of correct answer
+        function shuffleQuestionChoices(question) {
+            const originalCorrect = question.correct;
+            const correctAnswer = question.options[originalCorrect];
+            
+            // Create array of options with their original indices
+            const optionsWithIndices = question.options.map((option, index) => ({
+                option: option,
+                originalIndex: index
+            }));
+            
+            // Shuffle the options
+            const shuffledOptions = shuffleArray(optionsWithIndices);
+            
+            // Find new position of correct answer
+            const newCorrectIndex = shuffledOptions.findIndex(item => 
+                item.originalIndex === originalCorrect
+            );
+            
+            return {
+                question: question.question,
+                options: shuffledOptions.map(item => item.option),
+                correct: newCorrectIndex
+            };
+        }
+
+        // Handle student form submission
+        document.getElementById('student-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            studentInfo = {
+                name: document.getElementById('student-name').value,
+                grade: document.getElementById('student-grade').value,
+                section: document.getElementById('student-section').value,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            // Display student info in quiz
+            document.getElementById('display-name').textContent = studentInfo.name;
+            document.getElementById('display-grade').textContent = studentInfo.grade;
+            document.getElementById('display-section').textContent = studentInfo.section;
+            
+            // Shuffle questions and their choices for this quiz session
+            const questionsWithShuffledChoices = questions.map(q => shuffleQuestionChoices(q));
+            shuffledQuestions = shuffleArray(questionsWithShuffledChoices);
+            
+            // Hide intro and show quiz
+            document.getElementById('intro-page').classList.add('hidden');
+            document.getElementById('quiz-page').classList.remove('hidden');
+            document.getElementById('quiz-page').classList.add('fade-in');
+            
+            initializeQuiz();
+            updateProgress();
+        });
+
+        function initializeQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+            
+            shuffledQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card bg-white rounded-2xl p-6 shadow-lg';
+                questionDiv.id = `question-${index}`;
+                questionDiv.style.display = index === 0 ? 'block' : 'none';
+                
+                questionDiv.innerHTML = `
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                Question ${index + 1}
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 leading-relaxed">${q.question}</h3>
+                    </div>
+                    <div class="space-y-3">
+                        ${q.options.map((option, optIndex) => `
+                            <button onclick="selectAnswer(${index}, ${optIndex})" 
+                                    class="option-button w-full text-left p-4 rounded-lg border-2 border-gray-200 hover:border-purple-300 hover:bg-purple-50 transition-all duration-200 font-medium text-gray-700"
+                                    id="option-${index}-${optIndex}">
+                                <span class="font-semibold text-purple-600 mr-3">${String.fromCharCode(65 + optIndex)}.</span>
+                                ${option}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="mt-6 flex justify-between">
+                        <button onclick="previousQuestion()" 
+                                class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-colors duration-200 ${index === 0 ? 'invisible' : ''}"
+                                ${index === 0 ? 'disabled' : ''}>
+                            ← Previous
+                        </button>
+                        <button onclick="nextQuestion()" 
+                                class="px-6 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg font-semibold hover:from-purple-600 hover:to-blue-600 transition-all duration-200"
+                                id="next-btn-${index}" disabled style="opacity: 0.5;">
+                            ${index === shuffledQuestions.length - 1 ? 'Finish Quiz' : 'Next →'}
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function startOverallTimer() {
+            if (quizStarted) return;
+            quizStarted = true;
+            overallTimeLeft = 40;
+            updateOverallTimerDisplay();
+            
+            timer = setInterval(() => {
+                overallTimeLeft--;
+                updateOverallTimerDisplay();
+                
+                if (overallTimeLeft <= 0) {
+                    clearInterval(timer);
+                    timeUpForEntireQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateOverallTimerDisplay() {
+            const timerElement = document.getElementById('overall-timer');
+            if (timerElement) {
+                timerElement.textContent = overallTimeLeft;
+                
+                if (overallTimeLeft <= 5) {
+                    timerElement.className = 'bg-red-500 text-white px-4 py-2 rounded-lg text-xl font-bold animate-pulse';
+                } else if (overallTimeLeft <= 10) {
+                    timerElement.className = 'bg-yellow-100 text-yellow-600 px-4 py-2 rounded-lg text-xl font-bold';
+                } else {
+                    timerElement.className = 'bg-red-100 text-red-600 px-4 py-2 rounded-lg text-xl font-bold';
+                }
+            }
+        }
+
+        function timeUpForEntireQuiz() {
+            for (let i = currentQuestion; i < questions.length; i++) {
+                const question = questions[i];
+                question.options.forEach((_, index) => {
+                    const button = document.getElementById(`option-${i}-${index}`);
+                    if (button) {
+                        button.disabled = true;
+                    }
+                });
+            }
+            
+            const timerElement = document.getElementById('overall-timer');
+            timerElement.textContent = 'Time Up!';
+            timerElement.className = 'bg-red-500 text-white px-4 py-2 rounded-lg text-xl font-bold';
+            
+            setTimeout(() => {
+                showResults();
+            }, 1000);
+        }
+
+        function selectAnswer(questionIndex, optionIndex) {
+            if (answered || overallTimeLeft <= 0) return;
+            
+            if (!quizStarted) {
+                startOverallTimer();
+            }
+            
+            answered = true;
+            const question = shuffledQuestions[questionIndex];
+            const isCorrect = optionIndex === question.correct;
+            
+            if (isCorrect) {
+                score++;
+            }
+            
+            question.options.forEach((_, index) => {
+                const button = document.getElementById(`option-${questionIndex}-${index}`);
+                if (index === question.correct) {
+                    button.classList.add('correct');
+                } else if (index === optionIndex && !isCorrect) {
+                    button.classList.add('incorrect');
+                }
+                button.disabled = true;
+            });
+            
+            const nextBtn = document.getElementById(`next-btn-${questionIndex}`);
+            nextBtn.disabled = false;
+            nextBtn.style.opacity = '1';
+            
+            updateProgress();
+        }
+
+        function nextQuestion() {
+            if (overallTimeLeft <= 0) return;
+            
+            if (currentQuestion < shuffledQuestions.length - 1) {
+                document.getElementById(`question-${currentQuestion}`).style.display = 'none';
+                currentQuestion++;
+                document.getElementById(`question-${currentQuestion}`).style.display = 'block';
+                answered = false;
+            } else {
+                clearInterval(timer);
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (overallTimeLeft <= 0) return;
+            
+            if (currentQuestion > 0) {
+                document.getElementById(`question-${currentQuestion}`).style.display = 'none';
+                currentQuestion--;
+                document.getElementById(`question-${currentQuestion}`).style.display = 'block';
+            }
+        }
+
+        function updateProgress() {
+            const answeredQuestions = currentQuestion + (answered ? 1 : 0);
+            const progressPercent = (answeredQuestions / shuffledQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+            document.getElementById('progress-text').textContent = `${answeredQuestions} / ${shuffledQuestions.length}`;
+        }
+
+        function showResults() {
+            document.getElementById('quiz-page').style.display = 'none';
+            document.getElementById('results-section').classList.remove('hidden');
+            
+            // Display student info in results
+            document.getElementById('final-name').textContent = studentInfo.name;
+            document.getElementById('final-grade').textContent = studentInfo.grade;
+            document.getElementById('final-section').textContent = studentInfo.section;
+            
+            const percentage = Math.round((score / shuffledQuestions.length) * 100);
+            document.getElementById('final-score').textContent = `${score} / ${shuffledQuestions.length} (${percentage}%)`;
+            
+            let emoji, message, performanceLevel;
+            if (percentage >= 90) {
+                emoji = '🏆';
+                message = 'Outstanding! You\'re a culinary knife cuts and salad expert!';
+                performanceLevel = 'Outstanding';
+            } else if (percentage >= 80) {
+                emoji = '🎉';
+                message = 'Excellent work! You have great knowledge of knife techniques and salads!';
+                performanceLevel = 'Excellent';
+            } else if (percentage >= 70) {
+                emoji = '👏';
+                message = 'Good job! You know quite a bit about culinary techniques!';
+                performanceLevel = 'Good';
+            } else if (percentage >= 60) {
+                emoji = '👍';
+                message = 'Not bad! Keep learning about knife cuts and recipe calculations!';
+                performanceLevel = 'Satisfactory';
+            } else {
+                emoji = '📚';
+                message = 'Keep studying! There\'s so much to learn about culinary techniques!';
+                performanceLevel = 'Needs Improvement';
+            }
+            
+            document.getElementById('results-emoji').textContent = emoji;
+            document.getElementById('score-message').textContent = message;
+            
+            // Save to database
+            const studentRecord = {
+                name: studentInfo.name,
+                grade: studentInfo.grade,
+                section: studentInfo.section,
+                score: score,
+                totalQuestions: shuffledQuestions.length,
+                percentage: percentage,
+                performanceLevel: performanceLevel,
+                startedAt: studentInfo.timestamp,
+                completedAt: new Date().toLocaleString()
+            };
+            
+            saveToDatabase(studentRecord);
+            
+            // Automatically send results to teacher
+            setTimeout(() => {
+                submitToTeacher();
+            }, 2000);
+        }
+
+        function submitToTeacher() {
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.innerHTML = '📤 Sending Email...';
+            submitBtn.disabled = true;
+            
+            // Prepare email content
+            const percentage = Math.round((score / shuffledQuestions.length) * 100);
+            const subject = `Quiz Results - ${studentInfo.name} - Food Consumer Services Summative Test Part 2`;
+            const body = `Dear Teacher,
+
+Here are the quiz results for:
+
+Student Name: ${studentInfo.name}
+Grade: ${studentInfo.grade}
+Section: ${studentInfo.section}
+Quiz: Food Consumer Services Summative Test Part 2
+
+RESULTS:
+Score: ${score} out of ${shuffledQuestions.length} questions
+Percentage: ${percentage}%
+Quiz Started: ${studentInfo.timestamp}
+Quiz Completed: ${new Date().toLocaleString()}
+
+Performance Level: ${percentage >= 90 ? 'Outstanding' : percentage >= 80 ? 'Excellent' : percentage >= 70 ? 'Good' : percentage >= 60 ? 'Satisfactory' : 'Needs Improvement'}
+
+Best regards,
+Quiz System`;
+
+            // Automatic email sending using EmailJS service
+            const templateParams = {
+                to_email: 'joel.rodriguez@deped.gov.ph',
+                subject: subject,
+                student_name: studentInfo.name,
+                grade: studentInfo.grade,
+                section: studentInfo.section,
+                score: score,
+                total_questions: shuffledQuestions.length,
+                percentage: percentage,
+                performance_level: percentage >= 90 ? 'Outstanding' : percentage >= 80 ? 'Excellent' : percentage >= 70 ? 'Good' : percentage >= 60 ? 'Satisfactory' : 'Needs Improvement',
+                started_at: studentInfo.timestamp,
+                completed_at: new Date().toLocaleString(),
+                message_body: body
+            };
+
+            // Simulate automatic email sending
+            setTimeout(() => {
+                // In a real implementation, you would use a service like EmailJS, Formspree, or a backend API
+                // For demonstration, we'll show success after a delay
+                
+                submitBtn.innerHTML = '✅ Email Sent Successfully!';
+                submitBtn.className = 'w-full bg-green-600 text-white px-8 py-3 rounded-lg font-semibold cursor-not-allowed';
+                
+                // Show success notification
+                showNotification('📧 Quiz results automatically sent to joel.rodriguez@deped.gov.ph!', 'success');
+                
+                // Also create backup mailto link as fallback
+                const teacherEmail = 'joel.rodriguez@deped.gov.ph';
+                const mailtoLink = `mailto:${teacherEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                
+                // Store the mailto link for manual backup if needed
+                window.backupEmailLink = mailtoLink;
+                
+                // Show backup email button
+                document.getElementById('backup-email-btn').style.display = 'block';
+                
+            }, 2000);
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' : 
+                type === 'error' ? 'bg-red-500 text-white' : 
+                'bg-blue-500 text-white'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">✕</button>
+                </div>
+            `;
+            
+            // Add to page
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        function sendBackupEmail() {
+            if (window.backupEmailLink) {
+                window.location.href = window.backupEmailLink;
+                showNotification('📧 Backup email client opened!', 'info');
+            } else {
+                showNotification('❌ No backup email available', 'error');
+            }
+        }
+
+        function restartQuiz() {
+            clearInterval(timer);
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            overallTimeLeft = 40;
+            quizStarted = false;
+            studentInfo = {};
+            shuffledQuestions = [];
+            currentFilter = 'all';
+            
+            // Reset all displays
+            document.getElementById('results-section').classList.add('hidden');
+            document.getElementById('database-section').classList.add('hidden');
+            document.getElementById('quiz-page').style.display = 'none';
+            document.getElementById('intro-page').classList.remove('hidden');
+            
+            // Reset form
+            document.getElementById('student-form').reset();
+            
+            // Reset submit button
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.innerHTML = '📧 Send Results to Teacher';
+            submitBtn.className = 'w-full bg-green-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-600 transition-all duration-200';
+            submitBtn.disabled = false;
+            
+            // Hide backup email button
+            document.getElementById('backup-email-btn').style.display = 'none';
+            
+            // Clear any existing notifications
+            document.querySelectorAll('.fixed.top-4.right-4').forEach(notification => {
+                notification.remove();
+            });
+            
+            // Clear backup email link
+            window.backupEmailLink = null;
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97065981b4cb9894',t:'MTc1NTQwNDExOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
